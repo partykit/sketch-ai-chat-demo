@@ -5,8 +5,8 @@ import WhosHere from "../components/whos-here";
 // PartyKit will inject the host into the server bundle
 // so let's read it here and expose it to the client
 declare const PARTYKIT_HOST: string;
-export function loader() {
-  return { partykitHost: PARTYKIT_HOST };
+export function loader({ context }) {
+  return { partykitHost: PARTYKIT_HOST, ...context };
 }
 
 export const meta: MetaFunction = () => {
