@@ -1,6 +1,5 @@
-import { useState } from "react";
 import SetUsernameForm from "./set-username-form";
-import type { User } from "~/types";
+import type { User } from "~/shared";
 
 export default function Overlay(props: {
   dismiss: () => void;

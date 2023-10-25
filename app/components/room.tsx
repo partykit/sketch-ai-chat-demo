@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "~/providers/user-context";
-import type { Message } from "~/types";
+import type { Message } from "~/shared";
 import AddMessageForm from "./add-message-form";
 
 export default function Room(props: { roomName: string }) {
@@ -33,7 +33,7 @@ export default function Room(props: { roomName: string }) {
           <div className="flex flex-col gap-3 w-full">
             {messages.map((message, i) => {
               const extraClasses =
-                message.user === "me" ? "flex-row-reverse" : "";
+                message.user === user?.name ? "flex-row-reverse" : "";
               return (
                 <div
                   key={i}

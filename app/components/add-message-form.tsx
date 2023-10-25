@@ -1,5 +1,6 @@
 import { useState } from "react";
-import type { Message, User } from "~/types";
+import type { Message, User } from "~/shared";
+import { createMessage } from "~/shared";
 
 export default function AddMessageForm(props: {
   addMessage: (message: Message) => void;
@@ -10,7 +11,8 @@ export default function AddMessageForm(props: {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!message) return;
-    props.addMessage({ user: "me", body: message });
+    if (!props.user) return;
+    props.addMessage(createMessage(props.user, message));
     setMessage("");
   };
 

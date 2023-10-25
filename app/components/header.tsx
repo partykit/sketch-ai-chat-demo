@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useUser } from "~/providers/user-context";
 import Overlay from "./header-overlay";
-import type { User } from "~/types";
+import type { User } from "~/shared";
 
 const navigation = [{ name: "All Chats", href: "/chats" }];
 

@@ -1,5 +1,3 @@
-const navigation = [{ name: "Chat", href: "/chats" }];
-
 export default function Footer() {
   return (
     <footer className="bg-white mt-auto">

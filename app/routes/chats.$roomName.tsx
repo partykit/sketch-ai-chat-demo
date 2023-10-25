@@ -11,7 +11,7 @@ export default function Chats() {
 
   return (
     <div className="grow w-full h-full flex flex-col justify-start">
-      <h1 className="text-2xl font-semibold text-gray-900">Chat: {roomName}</h1>
+      <h1 className="text-2xl font-semibold text-gray-900 mb-4">Chat: {roomName}</h1>
       <Room roomName={roomName} />
     </div>
   );
