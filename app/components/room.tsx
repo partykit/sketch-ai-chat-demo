@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from "react";
+import { useUser } from "~/providers/user-context";
 import type { Message } from "~/types";
 import AddMessageForm from "./add-message-form";
 
 export default function Room(props: { roomName: string }) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const { user } = useUser();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,7 +51,7 @@ export default function Room(props: { roomName: string }) {
         </div>
       </div>
       <div className="mt-auto w-full">
-        <AddMessageForm addMessage={addMessage} />
+        <AddMessageForm addMessage={addMessage} user={user} />
       </div>
     </div>
   );

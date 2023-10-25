@@ -8,6 +8,7 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import stylesheet from "~/tailwind.css";
+import { UserProvider } from "~/providers/user-context";
 import Header from "~/components/header";
 import Footer from "~/components/footer";
 
@@ -30,16 +31,18 @@ export default function App() {
           lineHeight: "1.8",
           minHeight: "100dvh",
         }}
-        className="bg-white flex flex-col min-h-screen justify-between items-between w-full"
+        className="relative bg-white flex flex-col min-h-screen justify-between items-between w-full"
       >
-        <Header />
-        <main className="isolate mx-auto grow flex flex-col max-w-7xl p-6 justify-start items-start h-full w-full">
-          <Outlet />
-          <ScrollRestoration />
-          <Scripts />
-          {process.env.NODE_ENV === "development" && <LiveReload />}
-        </main>
-        <Footer />
+        <UserProvider>
+          <Header />
+          <main className="isolate mx-auto grow flex flex-col max-w-7xl p-6 justify-start items-start h-full w-full">
+            <Outlet />
+            <ScrollRestoration />
+            <Scripts />
+            {process.env.NODE_ENV === "development" && <LiveReload />}
+          </main>
+          <Footer />
+        </UserProvider>
       </body>
     </html>
   );

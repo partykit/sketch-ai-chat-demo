@@ -1,8 +1,9 @@
 import { useState } from "react";
-import type { Message } from "~/types";
+import type { Message, User } from "~/types";
 
 export default function AddMessageForm(props: {
   addMessage: (message: Message) => void;
+  user: User | null;
 }) {
   const [message, setMessage] = useState("");
 
@@ -12,6 +13,8 @@ export default function AddMessageForm(props: {
     props.addMessage({ user: "me", body: message });
     setMessage("");
   };
+
+  const disabled = !props.user;
 
   return (
     <form
@@ -23,12 +26,14 @@ export default function AddMessageForm(props: {
         name="message"
         placeholder="Your message..."
         value={message}
-        className="grow border border-stone-300 p-2"
+        className="grow border border-stone-300 p-2 disabled:bg-stone-100 disabled:cursor-not-allowed"
         onChange={(e) => setMessage(e.target.value)}
+        disabled={disabled}
       />
       <button
-        className="grow-0 border border-stone-300 px-4 py-2 rounded"
+        className="grow-0 border border-stone-300 px-4 py-2 rounded disabled:bg-stone-100 disabled:text-stone-400 disabled:cursor-not-allowed"
         type="submit"
+        disabled={disabled}
       >
         Send
       </button>
