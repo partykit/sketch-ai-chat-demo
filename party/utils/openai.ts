@@ -3,6 +3,9 @@ import { getEncoding, encodingForModel } from "js-tiktoken";
 
 export type OpenAIMessage = OpenAI.Chat.Completions.ChatCompletionMessageParam;
 
+// For counting tokens. Correct encoder for gpt-3.5-turbo
+const tiktoken = getEncoding("cl100k_base");
+
 export async function getChatCompletionResponse(
   env: Record<string, any>,
   messages: OpenAIMessage[],
@@ -28,9 +31,19 @@ export async function getChatCompletionResponse(
     messages: prompt,
   });
 
+  let response = "";
   for await (const part of stream) {
-    onTokenCallback(part.choices[0]?.delta.content || "");
+    const delta = part.choices[0]?.delta.content || "";
+    response += delta;
+    onTokenCallback(delta);
   }
 
-  return null;
+  // Return the number of tokens used
+  // This is the number of tokens used by the prompt, plus 4 for the role
+  let tokens = prompt.reduce((sum, msg) => {
+    return sum + tiktoken.encode(msg.content ?? "").length + 4;
+  }, 0);
+  // Add the tokens used by the response, plus 3 overhead
+  tokens += tiktoken.encode(response).length + 3;
+  return tokens;
 }

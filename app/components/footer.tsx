@@ -5,12 +5,10 @@ export default function Footer() {
         className="mx-auto flex max-w-7xl items-center justify-between p-6"
         aria-label="Global"
       >
-        <div className="flex flex-1">
-          <a href="/" className="-m-1.5 p-1.5 text-sm text-black/60">
-            🎈 Built with{" "}
-            <a href="https://www.partykit.io" className="underline">
-              PartyKit
-            </a>
+        <div className="text-sm text-black/60">
+          🎈 Built with{" "}
+          <a href="https://www.partykit.io" className="underline">
+            PartyKit
           </a>
         </div>
       </div>

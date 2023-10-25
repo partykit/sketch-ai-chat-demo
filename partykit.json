@@ -4,7 +4,8 @@
   "main": "build/index.js",
   "compatibilityDate": "2023-10-14",
   "parties": {
-    "chatRoom": "party/chatRoom.ts"
+    "chatRoom": "party/chatRoom.ts",
+    "usage": "party/usage.ts"
   },
   "serve": "public",
   "define": {

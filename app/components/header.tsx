@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { useUser } from "~/providers/user-context";
 import Overlay from "./header-overlay";
-import type { User } from "~/shared";
+import { Link } from "@remix-run/react";
 
-const navigation = [{ name: "All Chats", href: "/chats" }];
+const navigation = [
+  { name: "All Chats", href: "/chats" },
+  { name: "Usage", href: "/usage" },
+];
 
 export default function Header() {
   const { user, setUser } = useUser();
@@ -24,15 +27,15 @@ export default function Header() {
           aria-label="Global"
         >
           <div className="flex flex-1">
-            <a href="/" className="-m-1.5 p-1.5 font-semibold uppercase">
+            <Link to="/" className="-m-1.5 p-1.5 font-semibold uppercase">
               <span>My Chat App</span>
-            </a>
+            </Link>
           </div>
           <div className="flex gap-x-12">
             {navigation.map((item) => (
-              <a key={item.name} href={item.href} className="font-semibold">
+              <Link key={item.name} to={item.href} className="font-semibold">
                 {item.name}
-              </a>
+              </Link>
             ))}
           </div>
           <div className="flex flex-1 justify-end">
