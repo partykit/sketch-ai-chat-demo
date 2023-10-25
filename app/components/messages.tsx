@@ -33,11 +33,13 @@ export default function Messages(props: {
             return (
               <div
                 key={i}
-                className={`flex justify-start items-center gap-2 ${extraClasses}`}
+                className={`flex justify-start items-end gap-2 ${extraClasses}`}
               >
-                <div className="font-semibold">{message.user}</div>
+                <div className="font-semibold pb-1">{message.user}</div>
                 <div className="rounded-lg bg-stone-200 px-2 py-1">
-                  {message.body}
+                  {message.body.split("\n").map((line, i) => (
+                    <div key={i}>{line}</div>
+                  ))}
                 </div>
               </div>
             );
