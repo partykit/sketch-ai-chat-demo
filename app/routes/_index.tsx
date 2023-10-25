@@ -10,8 +10,8 @@ export function loader({ context }) {
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "New Partymix App" },
-    { name: "description", content: "Welcome to Remix!" },
+    { title: "AI Chat" },
+    { name: "description", content: "PartyKit demo app" },
   ];
 };
 

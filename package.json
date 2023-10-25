@@ -1,7 +1,7 @@
 {
   "name": "sketch-ai-chat-demo",
   "private": true,
-  "description": "🎈 PartyKit ⤫ Remix 💿",
+  "description": "🎈 AI Chat Demo",
   "sideEffects": false,
   "type": "module",
   "scripts": {
