@@ -1,6 +1,5 @@
 import { useLoaderData } from "@remix-run/react";
 import type { MetaFunction } from "partymix";
-import WhosHere from "../components/whos-here";
 
 // PartyKit will inject the host into the server bundle
 // so let's read it here and expose it to the client
@@ -19,9 +18,5 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const { partykitHost } = useLoaderData<typeof loader>();
 
-  return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Hello, World!</h1>
-    </div>
-  );
+  return <h1>Hello, World!</h1>;
 }

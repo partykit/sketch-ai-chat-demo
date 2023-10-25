@@ -8,6 +8,8 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 import stylesheet from "~/tailwind.css";
+import Header from "~/components/header";
+import Footer from "~/components/footer";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
@@ -22,11 +24,22 @@ export default function App() {
         <Meta />
         <Links />
       </head>
-      <body>
-        <Outlet />
-        <ScrollRestoration />
-        <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+      <body
+        style={{
+          fontFamily: "system-ui, sans-serif",
+          lineHeight: "1.8",
+          minHeight: "100dvh",
+        }}
+        className="bg-white flex flex-col min-h-screen justify-between items-between w-full"
+      >
+        <Header />
+        <main className="isolate mx-auto flex flex-col max-w-7xl p-6 justify-start items-start w-full">
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+          {process.env.NODE_ENV === "development" && <LiveReload />}
+        </main>
+        <Footer />
       </body>
     </html>
   );
