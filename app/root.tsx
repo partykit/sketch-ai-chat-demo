@@ -33,7 +33,7 @@ export default function App() {
         className="bg-white flex flex-col min-h-screen justify-between items-between w-full"
       >
         <Header />
-        <main className="isolate mx-auto flex flex-col max-w-7xl p-6 justify-start items-start w-full">
+        <main className="isolate mx-auto grow flex flex-col max-w-7xl p-6 justify-start items-start h-full w-full">
           <Outlet />
           <ScrollRestoration />
           <Scripts />
