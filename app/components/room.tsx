@@ -2,57 +2,36 @@ import { useState, useRef, useEffect } from "react";
 import { useUser } from "~/providers/user-context";
 import type { Message } from "~/shared";
 import AddMessageForm from "./add-message-form";
+import Messages from "./messages";
+import usePartySocket from "partysocket/react";
 
-export default function Room(props: { roomName: string }) {
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+export default function Room(props: { host: string; roomName: string }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const { user } = useUser();
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  // Listen for window resizes
-  useEffect(() => {
-    window.addEventListener("resize", scrollToBottom);
-    return () => window.removeEventListener("resize", scrollToBottom);
-  }, []);
+  const socket = usePartySocket({
+    host: props.host,
+    party: "chatRoom",
+    room: props.roomName,
+    onMessage(evt) {
+      const data = JSON.parse(evt.data);
+      if (data.type === "history") {
+        setMessages(data.messages);
+      } else if (data.type === "update") {
+        setMessages((prevMessages) => [...prevMessages, data.message]);
+      }
+    },
+  });
 
   const addMessage = (message: Message) => {
-    setMessages((messages) => [...messages, message]);
+    setMessages((prevMessages) => [...prevMessages, message]);
+    socket.send(JSON.stringify({ type: "message", message }));
   };
 
   return (
     <div className="grow flex flex-col justify-between items-start">
-      <div className="grow w-full basis-full relative overflow-y-scroll">
-        <div className="absolute top-0 left-0 w-full h-full">
-          <div className="flex flex-col gap-3 w-full">
-            {messages.map((message, i) => {
-              const extraClasses =
-                message.user === user?.name ? "flex-row-reverse" : "";
-              return (
-                <div
-                  key={i}
-                  className={`flex justify-start items-center gap-2 ${extraClasses}`}
-                >
-                  <div className="font-semibold">{message.user}</div>
-                  <div className="rounded-lg bg-stone-200 px-2 py-1">
-                    {message.body}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div ref={messagesEndRef} className="h-2"></div>
-        </div>
-      </div>
-      <div className="mt-auto w-full">
-        <AddMessageForm addMessage={addMessage} user={user} />
-      </div>
+      <Messages user={user} messages={messages} />
+      <AddMessageForm addMessage={addMessage} user={user} />
     </div>
   );
 }

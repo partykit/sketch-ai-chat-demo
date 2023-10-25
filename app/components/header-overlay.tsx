@@ -6,7 +6,8 @@ export default function Overlay(props: {
   setUser: (user: any) => void;
 }) {
   const handleSetUserName = (name: string) => {
-    props.setUser({ name });
+    console.log("setting user name", name);
+    props.setUser({ name: name } as User);
     props.dismiss();
   };
 

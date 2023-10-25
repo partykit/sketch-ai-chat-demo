@@ -23,6 +23,7 @@ export default function SetUsernameForm(props: {
         name="name"
         placeholder="e.g. Sunil"
         value={name}
+        autoFocus
         className="grow border border-stone-300 text-stone-900 p-2"
         onChange={(e) => setName(e.target.value)}
       />

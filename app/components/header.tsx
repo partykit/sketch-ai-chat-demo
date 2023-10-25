@@ -10,7 +10,6 @@ export default function Header() {
   const [showOverlay, setShowOverlay] = useState(false);
 
   const handleSignIn = () => {
-    setUser({ name: "Guest" });
     setShowOverlay(true);
   };
 
@@ -40,22 +39,21 @@ export default function Header() {
             {user && (
               <div className="flex items-center gap-x-2">
                 <span>Hi {user.name}!</span>
-                <a
-                  href="#"
-                  className="font-semibold"
+                <button
+                  className="font-semibold cursor-pointer"
                   onClick={() => setUser(null)}
                 >
                   Logout
-                </a>
+                </button>
               </div>
             )}
             {!user && (
-              <div
+              <button
                 className="border border-stone-400 rounded-full px-3 py-1 cursor-pointer"
                 onClick={handleSignIn}
               >
                 Sign in
-              </div>
+              </button>
             )}
           </div>
         </nav>
