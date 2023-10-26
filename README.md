@@ -23,7 +23,7 @@ git checkout demo-01
 npm run dev
 ```
 
-/docs/assets/demo-01.mp4
+https://github.com/partykit/sketch-ai-chat-demo/assets/265390/9cad8cf0-c49d-428a-ad8b-bbcb4ff8aab5
 
 At this first step, all we have is a UI shell. PartyKit is used only to serve the app.
 
