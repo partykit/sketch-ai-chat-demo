@@ -5,8 +5,7 @@
   "compatibilityDate": "2023-10-14",
   "parties": {
     "chatRoom": "party/chatRoom.ts",
-    "usage": "party/usage.ts",
-    "presence": "party/presence.ts"
+    "usage": "party/usage.ts"
   },
   "serve": "public",
   "define": {
