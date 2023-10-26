@@ -1,7 +1,5 @@
 import { useLoaderData } from "@remix-run/react";
 import { useState, useEffect } from "react";
-import usePartySocket from "partysocket/react";
-import { USAGE_SINGLETON_ROOM_ID } from "../../party/usage";
 
 type LoaderFunctionArgs = { context: any };
 
@@ -14,16 +12,6 @@ export default function Usage() {
   const { partykitHost } = useLoaderData<typeof loader>();
   const [tally, setTally] = useState(0);
   const [displayTally, setDisplayTally] = useState(0);
-
-  usePartySocket({
-    host: partykitHost,
-    party: "usage",
-    room: USAGE_SINGLETON_ROOM_ID,
-    onMessage(evt) {
-      const { tally } = JSON.parse(evt.data);
-      setTally((prev) => prev + (tally || 0));
-    },
-  });
 
   useEffect(() => {
     const interval = setInterval(() => {

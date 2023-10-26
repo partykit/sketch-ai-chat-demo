@@ -1,7 +1,6 @@
 import type * as Party from "partykit/server";
 import { type Message, createMessage } from "../app/shared";
 import { getChatCompletionResponse, type OpenAIMessage } from "./utils/openai";
-import { USAGE_SINGLETON_ROOM_ID } from "./usage";
 
 const AI_USER = { name: "AI" };
 
@@ -50,10 +49,5 @@ export default class ChatServer implements Party.Server {
         );
       }
     );
-    // Report usage to the usage server
-    this.party.context.parties.usage.get(USAGE_SINGLETON_ROOM_ID).fetch({
-      method: "POST",
-      body: JSON.stringify({ usage: tokens }),
-    });
   }
 }
