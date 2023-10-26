@@ -3,9 +3,6 @@
   // remix compiles our actual entry point (party/main.ts) to build/index.js
   "main": "build/index.js",
   "compatibilityDate": "2023-10-14",
-  "parties": {
-    "chatRoom": "party/chatRoom.ts"
-  },
   "serve": "public",
   "define": {
     "process.env.REMIX_DEV_ORIGIN": "'http://127.0.0.1:8002'",
