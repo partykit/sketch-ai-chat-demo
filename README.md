@@ -23,6 +23,8 @@ git checkout demo-01
 npm run dev
 ```
 
+![](/docs/assets/demo-01.mp4)
+
 At this first step, all we have is a UI shell. PartyKit is used only to serve the app.
 
 What to demo:
@@ -39,6 +41,8 @@ What to demo:
 git checkout demo-02
 npm run dev
 ```
+
+![](/docs/assets/demo-02.mp4)
 
 What's new:
 
@@ -58,6 +62,8 @@ What to demo:
 git checkout demo-03
 npm run dev
 ```
+
+![](/docs/assets/demo-03.mp4)
 
 What's new:
 
@@ -79,6 +85,8 @@ git checkout demo-04
 npm run dev
 ```
 
+![](/docs/assets/demo-04.mp4)
+
 What's new:
 
 - OpenAI API token usage tracking.
@@ -95,6 +103,8 @@ What to demo:
 git checkout demo-05
 npm run dev
 ```
+
+![](/docs/assets/demo-05.mp4)
 
 What's new:
 
