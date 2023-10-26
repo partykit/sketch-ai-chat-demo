@@ -23,7 +23,7 @@ git checkout demo-01
 npm run dev
 ```
 
-![](/docs/assets/demo-01.mp4)
+/docs/assets/demo-01.mp4
 
 At this first step, all we have is a UI shell. PartyKit is used only to serve the app.
 
