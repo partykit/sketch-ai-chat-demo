@@ -40,7 +40,7 @@ export default function Usage() {
   }, [tally]);
 
   return (
-    <div className="flex flex-col justify-center items-center w-full gap-4 pt-8">
+    <div className="flex flex-col justify-center items-center w-full gap-4 pt-6">
       <div className="font-semibold text-9xl">{displayTally}</div>
       <div className="text-2xl text-gray-900">Tokens used with OpenAI</div>
     </div>

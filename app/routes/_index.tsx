@@ -18,5 +18,13 @@ export const meta: MetaFunction = () => {
 export default function Index() {
   const { partykitHost } = useLoaderData<typeof loader>();
 
-  return <h1>Hello, World!</h1>;
+  return (
+    <div className="flex flex-col justify-start items-start w-full gap-6 pt-6">
+      <div className="font-semibold text-7xl">🎈 PartyKit demo</div>
+      <div className="text-2xl text-stone-900 max-w-3xl">
+        Starting with a UI shell of chatrooms, we’re going to add real-time
+        multiplayer interactions and AI chat ...in 10 minutes.
+      </div>
+    </div>
+  );
 }

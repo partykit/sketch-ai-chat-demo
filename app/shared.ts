@@ -21,3 +21,26 @@ export function createMessage(
     role: role || "user",
   };
 }
+
+export const rooms = [
+  {
+    name: "Hello, World!",
+    description: "A general room",
+    slug: "hello-world",
+  },
+  {
+    name: "🎈 Party Chat",
+    description: "Let’s talk about PartyKit",
+    slug: "party-chat",
+  },
+  {
+    name: "On-Page Help",
+    description: "A room for every user, on every page?",
+    slug: "on-page-help",
+  },
+  {
+    name: "Room #4",
+    description: "Another chatroom",
+    slug: "room-4",
+  },
+];

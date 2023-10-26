@@ -7,6 +7,7 @@ declare const PARTYKIT_HOST: string;
 export async function loader({ context, params }: LoaderFunctionArgs) {
   return { partykitHost: PARTYKIT_HOST, ...context, ...params };
 }
+
 export default function Chats() {
   const { partykitHost, roomName } = useLoaderData<typeof loader>();
 
