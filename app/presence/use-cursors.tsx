@@ -1,31 +1,28 @@
-// Nests inside PresenceContext and handles cursor updates
+// Can be used only inside PresenceContext and handles cursor updates
 
-import { useState, createContext, useContext, useEffect } from "react";
-import type { Cursor, User } from "../../party/presence-schema";
+import { create } from "zustand";
+import { useState, useEffect } from "react";
+import type { Cursor, User } from "party/presence-schema";
 import { usePresence } from "./presence-context";
 
-interface CursorsContextType {
-  otherUsers: Map<string, User>;
+export type PresenceWithCursorsStore = {
+  myId: string | null;
   myself: User | null;
-}
+  otherUsers: Map<string, User>;
+};
 
-export const CursorsContext = createContext<CursorsContextType>({
-  otherUsers: {} as Map<string, User>,
+export const usePresenceWithCursors = create<PresenceWithCursorsStore>(() => ({
+  myId: null,
   myself: null,
-});
+  otherUsers: new Map(),
+}));
 
-export function useCursors() {
-  return useContext(CursorsContext);
-}
-
-export default function CursorsContextProvider(props: {
-  children: React.ReactNode;
-}) {
+export default function useCursorTracking() {
   const [dimensions, setDimensions] = useState<{
     width: number;
     height: number;
   }>({ width: 0, height: 0 });
-  const { myself, otherUsers, updatePresence } = usePresence();
+  const { myId, myself, otherUsers, updatePresence } = usePresence();
 
   // Track window dimensions
   useEffect(() => {
@@ -94,11 +91,11 @@ export default function CursorsContextProvider(props: {
     otherUsersTransformed.set(id, transformCursor(user));
   });
 
-  return (
-    <CursorsContext.Provider
-      value={{ otherUsers: otherUsersTransformed, myself: myselfTransformed }}
-    >
-      {props.children}
-    </CursorsContext.Provider>
-  );
+  usePresenceWithCursors.setState({
+    myId,
+    myself: myselfTransformed,
+    otherUsers: otherUsersTransformed,
+  });
+
+  return;
 }

@@ -1,34 +1,41 @@
 import countryCodeEmoji from "./country-code-emoji";
+import type { User } from "party/presence-schema";
+import { usePresenceWithCursors } from "./use-cursors";
 
 // NOTE
 // The pointer SVG is from https://github.com/daviddarnes/mac-cursors
 // The license is the Apple User Agreement
 
-export default function Cursor(props: {
-  id: string;
-  fill: string;
-  x: number;
-  y: number;
-  pointer: "mouse" | "touch";
-  country: string | null;
-  message: string | null;
-}) {
+export default function Cursor(props: { userId: string; fill: string }) {
+  const user: User | null = usePresenceWithCursors(
+    (state) => state.otherUsers.get(props.userId) || null
+  );
+  if (!user?.presence?.cursor) return;
+
+  const cursor = {
+    x: user.presence.cursor.x,
+    y: user.presence.cursor.y,
+    pointer: user.presence.cursor.pointer,
+    country: user.country,
+    message: user.presence.message ?? null,
+  };
+
   const offset = 10;
-  const flag = props.country ? `${countryCodeEmoji(props.country)} ` : "";
+  const flag = cursor.country ? `${countryCodeEmoji(cursor.country)} ` : "";
 
   return (
     <div
       className="absolute"
       style={{
-        transform: `translate(${props.x - offset}px, ${props.y - offset}px`,
+        transform: `translate(${cursor.x - offset}px, ${cursor.y - offset}px`,
       }}
     >
-      {props.pointer === "mouse" ? (
+      {cursor.pointer === "mouse" ? (
         <MousePointer fill={props.fill} />
       ) : (
         <TouchPointer fill={props.fill} />
       )}
-      {props.message === null && props.country !== null && (
+      {cursor.message === null && user.country !== null && (
         <div
           className="absolute text-2xl whitespace-nowrap p-1"
           style={{ top: "10px", left: "16px" }}
@@ -36,12 +43,12 @@ export default function Cursor(props: {
           {flag}
         </div>
       )}
-      {props.message !== null && (
+      {cursor.message !== null && (
         <div
           className="absolute text-xs rounded-full text-white whitespace-nowrap px-2 py-1"
           style={{ backgroundColor: props.fill, top: "18px", left: "20px" }}
         >
-          {props.message}
+          {cursor.message}
         </div>
       )}
     </div>

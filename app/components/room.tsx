@@ -4,10 +4,14 @@ import type { Message } from "~/shared";
 import AddMessageForm from "./add-message-form";
 import Messages from "./messages";
 import usePartySocket from "partysocket/react";
+import useCursorTracking from "~/presence/use-cursors";
+import OtherCursors from "~/presence/other-cursors";
 
 export default function Room(props: { host: string; roomName: string }) {
   const [messages, setMessages] = useState<Message[]>([]);
   const { user } = useUser();
+
+  useCursorTracking();
 
   const handleUpdate = (prevMessages: Message[], message: Message) => {
     // If message.id is already in prevMessages, replace it
@@ -44,9 +48,12 @@ export default function Room(props: { host: string; roomName: string }) {
   };
 
   return (
-    <div className="grow flex flex-col justify-between items-start">
-      <Messages user={user} messages={messages} />
-      <AddMessageForm addMessage={addMessage} user={user} />
-    </div>
+    <>
+      <OtherCursors />
+      <div className="grow flex flex-col justify-between items-start">
+        <Messages user={user} messages={messages} />
+        <AddMessageForm addMessage={addMessage} user={user} />
+      </div>
+    </>
   );
 }

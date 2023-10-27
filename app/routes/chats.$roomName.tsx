@@ -1,9 +1,7 @@
 import { useLoaderData } from "@remix-run/react";
 import Room from "~/components/room";
 import { rooms } from "~/shared";
-import PresenceContextProvider from "~/providers/presence-context";
-import CursorsContextProvider from "~/providers/cursors-context";
-import OtherCursors from "~/components/presence/other-cursors";
+import PresenceContextProvider from "~/presence/presence-context";
 
 type LoaderFunctionArgs = { context: any; params: { roomName: string } };
 
@@ -26,15 +24,12 @@ export default function Chats() {
       presence={{ cursor: null, message: null }}
       info={{ name: "Default name" }}
     >
-      <CursorsContextProvider>
-        <OtherCursors />
-        <div className="grow w-full h-full flex flex-col justify-start">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-4">
-            Room: {room.name}
-          </h1>
-          <Room host={partykitHost} roomName={room.slug} />
-        </div>
-      </CursorsContextProvider>
+      <div className="grow w-full h-full flex flex-col justify-start">
+        <h1 className="text-2xl font-semibold text-gray-900 mb-4">
+          Room: {room.name}
+        </h1>
+        <Room host={partykitHost} roomName={room.slug} />
+      </div>
     </PresenceContextProvider>
   );
 }

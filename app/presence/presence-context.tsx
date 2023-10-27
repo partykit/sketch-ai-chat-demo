@@ -17,7 +17,7 @@ import {
   decodeMessage,
   encodeClientMessage,
   partyMessageSchema,
-} from "../../party/presence-schema";
+} from "party/presence-schema";
 
 type UserMap = Map<string, User>;
 
