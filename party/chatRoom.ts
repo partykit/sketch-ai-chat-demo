@@ -30,9 +30,10 @@ export default class ChatServer implements Party.Server {
         JSON.stringify({ type: "update", message: msg.message }),
         [connection.id]
       );
-      if (await this.shouldReplyWithAI()) {
+      /*if (await this.shouldReplyWithAI()) {
         await this.replyWithAI();
-      }
+      }*/
+      await this.replyWithLlama();
     }
   }
 
@@ -62,11 +63,47 @@ export default class ChatServer implements Party.Server {
     });
   }
 
+  async replyWithLlama() {
+    // Setup
+    const messages = this.messages.map((msg) => {
+      return { role: msg.role, content: msg.body } as OpenAIMessage;
+    });
+    const aiMsg = createMessage(AI_USER, "Thinking...", "assistant");
+    this.messages.push(aiMsg);
+
+    // Run the AI
+    const prompt = [
+      {
+        role: "system",
+        content:
+          "You are a helpful AI assistant. Your responses are always accurate and extremely brief.",
+      } as OpenAIMessage,
+      ...messages,
+    ];
+    const stream = await this.ai.run("@cf/meta/llama-2-7b-chat-int8", {
+      messages: prompt as any,
+      stream: true,
+    });
+
+    // Process the streamed response
+    const decoder = new TextDecoder("utf-8");
+    let response = "";
+    for await (const part of stream) {
+      const decoded = decoder.decode(part, { stream: true });
+      if (decoded === "[DONE]") break;
+      console.log("got part", decoded);
+      const data = JSON.parse(decoded);
+      response += data.response;
+      console.log("response so far", response);
+      aiMsg.body = response;
+      this.party.broadcast(JSON.stringify({ type: "update", message: aiMsg }));
+    }
+  }
   async shouldReplyWithAI() {
     const systemPromptIntro =
       "You will be shown a conversation between multiple people (all called 'user') and an AI called 'assistant'. At the end of the conversation there will be a question.";
     const systemPromptsOutro =
-      "Given the conversation, should the AI reply? Take into account whether it is being addressed directly (e.g. '@AI'), is part of an existing chat, or can usefully interject. Response with YES or NO. The AI wants to be responsive and polite. Use only one of those two words.";
+      "Given the conversation, should the AI reply? Reply YES if the latest message is directed at the AI (e.g. '@AI'). Also reply YES if the latest message is asking the AI to clarify its message, even if this is indirect. Response NO otherwise. Use only one of the two words YES or NO.";
     const conversation = this.messages.map((msg) => {
       return { role: msg.role, content: msg.body } as OpenAIMessage;
     });
@@ -80,7 +117,7 @@ export default class ChatServer implements Party.Server {
         messages: messages as any,
         stream: false,
       });
-      //console.log("got result", JSON.stringify(result, null, 2));
+      console.log("got result", JSON.stringify(result, null, 2));
       if (result.response === "YES") {
         return true;
       }
