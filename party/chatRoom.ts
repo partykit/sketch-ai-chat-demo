@@ -3,6 +3,8 @@ import { Ai } from "partykit-ai";
 import { type Message, createMessage } from "../app/shared";
 import { getChatCompletionResponse, type OpenAIMessage } from "./utils/openai";
 import { USAGE_SINGLETON_ROOM_ID } from "./usage";
+// @ts-ignore
+import { EventSourceParserStream } from "eventsource-parser/stream";
 
 const AI_USER = { name: "AI" };
 
@@ -31,13 +33,13 @@ export default class ChatServer implements Party.Server {
         [connection.id]
       );
       /*if (await this.shouldReplyWithAI()) {
-        await this.replyWithAI();
+        await this.replyWithOpenAI();
       }*/
       await this.replyWithLlama();
     }
   }
 
-  async replyWithAI() {
+  async replyWithOpenAI() {
     const messages = this.messages.map((msg) => {
       return { role: msg.role, content: msg.body } as OpenAIMessage;
     });
@@ -84,21 +86,21 @@ export default class ChatServer implements Party.Server {
       messages: prompt as any,
       stream: true,
     });
+    const eventStream = stream
+      .pipeThrough(new TextDecoderStream("utf-8"))
+      .pipeThrough(new EventSourceParserStream());
 
     // Process the streamed response
-    const decoder = new TextDecoder("utf-8");
     let response = "";
-    for await (const part of stream) {
-      const decoded = decoder.decode(part, { stream: true });
-      if (decoded === "[DONE]") break;
-      console.log("got part", decoded);
-      const data = JSON.parse(decoded);
-      response += data.response;
-      console.log("response so far", response);
+    for await (const part of eventStream) {
+      if (part.data === "[DONE]") break;
+      const decoded = JSON.parse(part.data);
+      response += decoded.response;
       aiMsg.body = response;
       this.party.broadcast(JSON.stringify({ type: "update", message: aiMsg }));
     }
   }
+
   async shouldReplyWithAI() {
     const systemPromptIntro =
       "You will be shown a conversation between multiple people (all called 'user') and an AI called 'assistant'. At the end of the conversation there will be a question.";

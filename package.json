@@ -14,6 +14,7 @@
     "@msgpack/msgpack": "^3.0.0-beta2",
     "@remix-run/css-bundle": "^2.1.0",
     "@remix-run/react": "^2.1.0",
+    "eventsource-parser": "^1.1.1",
     "isbot": "^3.7.0",
     "js-tiktoken": "^1.0.7",
     "openai": "^4.13.0",
