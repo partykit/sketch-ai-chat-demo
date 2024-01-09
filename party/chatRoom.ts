@@ -64,9 +64,9 @@ export default class ChatServer implements Party.Server {
 
   async shouldReplyWithAI() {
     const systemPromptIntro =
-      "You will be shown a conversation. At the end of the conversation there will be a question.";
+      "You will be shown a conversation between multiple people (all called 'user') and an AI called 'assistant'. At the end of the conversation there will be a question.";
     const systemPromptsOutro =
-      "Given the conversation, should the AI add a message? Take into account whether it is being addressed direction (e.g. '@AI'), is part of an existing chat, or can useful interject. If you are unsure, do not add a message. Reply YES or NO. Use only one of those two words.";
+      "Given the conversation, should the AI reply? Take into account whether it is being addressed directly (e.g. '@AI'), is part of an existing chat, or can usefully interject. Response with YES or NO. The AI wants to be responsive and polite. Use only one of those two words.";
     const conversation = this.messages.map((msg) => {
       return { role: msg.role, content: msg.body } as OpenAIMessage;
     });
@@ -75,11 +75,19 @@ export default class ChatServer implements Party.Server {
       ...conversation,
       { role: "system", content: systemPromptsOutro },
     ];
-    const response = await this.ai.run("@cf/meta/llama-2-7b-chat-int8", {
-      messages: messages as any,
-    });
-    console.log(response);
+    try {
+      const result = await this.ai.run("@cf/meta/llama-2-7b-chat-int8", {
+        messages: messages as any,
+        stream: false,
+      });
+      //console.log("got result", JSON.stringify(result, null, 2));
+      if (result.response === "YES") {
+        return true;
+      }
+    } catch (err) {
+      console.log("error", err);
+    }
 
-    return true;
+    return false;
   }
 }
