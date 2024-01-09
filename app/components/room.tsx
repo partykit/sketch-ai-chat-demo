@@ -30,7 +30,7 @@ export default function Room(props: { host: string; roomName: string }) {
 
   const socket = usePartySocket({
     host: props.host,
-    party: "chatRoom",
+    party: "chatroom",
     room: props.roomName,
     onMessage(evt) {
       const data = JSON.parse(evt.data);
