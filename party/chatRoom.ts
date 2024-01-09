@@ -32,10 +32,14 @@ export default class ChatServer implements Party.Server {
         JSON.stringify({ type: "update", message: msg.message }),
         [connection.id]
       );
-      if (await this.shouldReply()) {
-        //await this.replyWithOpenAI();
-        await this.replyWithLlama();
-      }
+
+      // Commented out as not always reliable
+      //const shouldReply = await this.shouldReply();
+      //if (!shouldReply) return;
+
+      // Optionally use OpenAI
+      //await this.replyWithOpenAI();
+      await this.replyWithLlama();
     }
   }
 
@@ -102,6 +106,8 @@ export default class ChatServer implements Party.Server {
   }
 
   async shouldReply() {
+    // Use Mistral to determine whether the latest message is directed at the AI
+
     const transcript = this.messages
       .map((msg) => {
         return `${msg.role}: ${msg.body}`;
