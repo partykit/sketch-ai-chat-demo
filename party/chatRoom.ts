@@ -32,10 +32,10 @@ export default class ChatServer implements Party.Server {
         JSON.stringify({ type: "update", message: msg.message }),
         [connection.id]
       );
-      /*if (await this.shouldReplyWithAI()) {
-        await this.replyWithOpenAI();
-      }*/
-      await this.replyWithLlama();
+      if (await this.shouldReply()) {
+        //await this.replyWithOpenAI();
+        await this.replyWithLlama();
+      }
     }
   }
 
@@ -101,26 +101,27 @@ export default class ChatServer implements Party.Server {
     }
   }
 
-  async shouldReplyWithAI() {
-    const systemPromptIntro =
-      "You will be shown a conversation between multiple people (all called 'user') and an AI called 'assistant'. At the end of the conversation there will be a question.";
-    const systemPromptsOutro =
-      "Given the conversation, should the AI reply? Reply YES if the latest message is directed at the AI (e.g. '@AI'). Also reply YES if the latest message is asking the AI to clarify its message, even if this is indirect. Response NO otherwise. Use only one of the two words YES or NO.";
-    const conversation = this.messages.map((msg) => {
-      return { role: msg.role, content: msg.body } as OpenAIMessage;
-    });
-    const messages = [
-      { role: "system", content: systemPromptIntro },
-      ...conversation,
-      { role: "system", content: systemPromptsOutro },
-    ];
+  async shouldReply() {
+    const transcript = this.messages
+      .map((msg) => {
+        return `${msg.role}: ${msg.body}`;
+      })
+      .join("\n");
+
+    const prompt = `You are a helpful AI assistant. Here is a conversation transcript:
+
+${transcript}
+
+Is the latest message directed at you? Reply YES or NO. If you are unsure, reply NO.
+
+Use only one of the two words YES or NO.`;
+
     try {
-      const result = await this.ai.run("@cf/meta/llama-2-7b-chat-int8", {
-        messages: messages as any,
-        stream: false,
+      const result = await this.ai.run("@cf/mistral/mistral-7b-instruct-v0.1", {
+        prompt,
       });
       console.log("got result", JSON.stringify(result, null, 2));
-      if (result.response === "YES") {
+      if (result.response.trim() === "YES") {
         return true;
       }
     } catch (err) {
