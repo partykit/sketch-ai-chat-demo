@@ -2,6 +2,10 @@
 
 This app can be used to demonstrate how to add PartyKit to an existing app. It is a multiplayer chat app that uses AI to generate responses.
 
+![](/assets/docs/llama2-screengrab.png)
+
+_The main branch of this demo uses OpenAI. This branch uses llama2 to generate responses, with an optional `shouldReply` function (using Mistral) to control when the AI should respond._
+
 ## Setup
 
 Clone this repo.
